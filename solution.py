@@ -87,9 +87,10 @@ class Library:
             
     def add_book(self, title: str, author: str, publish_date, isbn: int) -> bool | str:
       newBook = Book(title, author, publish_date, isbn)
-      if newBook in self.books:
+      if newBook in self.books: # reference check, check if they are the same INSTANCE of the same book
         return False
       self.books.append(newBook)
+      self._save_data()
       return newBook.title
         
     def add_user(self, first_name: str, last_name: str, student_id: int):
