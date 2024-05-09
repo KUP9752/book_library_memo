@@ -15,9 +15,9 @@ class Book:
         self.isbn = isbn
         self.is_borrowed = is_borrow
         self.borrower = borrower
-    def __eq__(self, other: object): 
-      ## other must also be a book
-      return isinstance(other, Book) and other.isbn == self.isbn
+    # def __eq__(self, other: object): 
+    #   ## other must also be a book
+    #   return isinstance(other, Book) and other.isbn == self.isbn
         
 class User:
     def __init__(self, first_name: str, last_name: str, student_id: int):
