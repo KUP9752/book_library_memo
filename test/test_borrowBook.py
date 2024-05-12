@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import patch
 
-from solution import Book, User, Library
+import sys
+sys.path.append("../")
+
+from src.solution import Book, User, Library
 
 
 class TestBorrowBook(unittest.TestCase):

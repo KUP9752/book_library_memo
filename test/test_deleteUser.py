@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import patch
 
-from solution import User, Book, Library
+import sys
+sys.path.append("../")
+
+from src.solution import User, Book, Library
 
 
 class TestDeleteUSer(unittest.TestCase):

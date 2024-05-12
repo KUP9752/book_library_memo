@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import patch
 
-from solution import Book, Library
+import sys
+sys.path.append("../")
+
+from src.solution import Book, Library
 
 class TestAddBook(unittest.TestCase):
   book1args = {"title": "book1", "author": "author1", "publish_date": "15", "isbn": 25}
