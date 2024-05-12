@@ -16,7 +16,7 @@ class Book:
         self.is_borrowed = is_borrow
         self.borrower = borrower
     def __eq__(self, other: object) -> bool:
-      return isinstance(other, Book) and other.isbn == self.student_id
+      return isinstance(other, Book) and other.isbn == self.isbn
         
 class User:
     def __init__(self, first_name: str, last_name: str, student_id: int):
@@ -28,11 +28,12 @@ class User:
       return isinstance(other, User) and other.isbn == self.isbn
 
 class Library:
-    def __init__(self):
+    def __init__(self, test: bool = False):
         self.books: list[Book] = []
         self.users: list[User] = []
         self.data_file = "library_data.json"
-        # self._load_data()
+        if not test: 
+          self._load_data()
 
     def _save_data(self):
         books_data = []
