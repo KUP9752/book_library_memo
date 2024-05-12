@@ -25,7 +25,7 @@ class User:
         self.student_id: int = student_id
     def __eq__(self, other: object) -> bool:
       ## other must also be a User
-      return isinstance(other, User) and other.isbn == self.isbn
+      return isinstance(other, User) and other.student_id == self.student_id
 
 class Library:
     def __init__(self, test: bool = False):
@@ -110,7 +110,6 @@ class Library:
       return any(map(lambda book: book.isbn == isbn, self.books))
 
     def find_book_by_isbn(self, isbn) :
-      ## yavas olabilir (olmayadabilir, test etmedim) ama siktiret 1 satir
       for book in self.books:
         if book.isbn == isbn:
           return book
