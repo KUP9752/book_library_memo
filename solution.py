@@ -15,22 +15,24 @@ class Book:
         self.isbn = isbn
         self.is_borrowed = is_borrow
         self.borrower = borrower
-    # def __eq__(self, other: object): 
-    #   ## other must also be a book
-    #   return isinstance(other, Book) and other.isbn == self.isbn
+    def __eq__(self, other: object) -> bool:
+      return isinstance(other, Book) and other.isbn == self.student_id
         
 class User:
     def __init__(self, first_name: str, last_name: str, student_id: int):
         self.first_name: str = first_name
         self.last_name: str = last_name
         self.student_id: int = student_id
+    def __eq__(self, other: object) -> bool:
+      ## other must also be a User
+      return isinstance(other, User) and other.isbn == self.isbn
 
 class Library:
     def __init__(self):
         self.books: list[Book] = []
         self.users: list[User] = []
         self.data_file = "library_data.json"
-        self._load_data()
+        # self._load_data()
 
     def _save_data(self):
         books_data = []
@@ -85,31 +87,75 @@ class Library:
         except FileNotFoundError:
             self._save_data()
             
-    def add_book(self, title: str, author: str, publish_date, isbn: int) -> bool | str:
+    def add_book(self, title: str, author: str, publish_date, isbn: int):
       newBook = Book(title, author, publish_date, isbn)
-      if newBook in self.books: # reference check, check if they are the same INSTANCE of the same book
+      ## i took isbn to be uniquely defining, reference check makes no sense here
+      if newBook in self.books: 
         return False
       self.books.append(newBook)
       self._save_data()
       return newBook.title
         
     def add_user(self, first_name: str, last_name: str, student_id: int):
-        pass
+      newUser = User(first_name, last_name, student_id)
+      if newUser in self.users:
+        return False
+      self.users.append(newUser)
+      self._save_data()
+      return newUser.student_id
         
-    def check_book_by_isbn(self, isbn):
-        pass
+    def check_book_by_isbn(self, isbn) -> bool:
+      ## yavas olabilir (olmayadabilir, test etmedim) ama siktiret 1 satir
+      return any(map(lambda book: book.isbn == isbn, self.books))
 
-    def remove_book(self, isbn: int):
-        pass
-
+    def find_book_by_isbn(self, isbn) :
+      ## yavas olabilir (olmayadabilir, test etmedim) ama siktiret 1 satir
+      for book in self.books:
+        if book.isbn == isbn:
+          return book
+      return False
+    
+    def remove_book(self, isbn: int) -> bool:
+      res: str | False = False
+      for book in self.books:
+        if book.isbn == isbn:
+          self.books.remove(book)
+          res = book.title
+      self._save_data()
+      return res
+      
     def delete_user(self, student_id: int):
-        pass
+      fakeUser = User("fake", "fake", student_id)
+      if fakeUser in self.users:
+        if not list(filter(lambda book: book.borrower == student_id, self.books)):
+          self.users.remove(fakeUser)
+          return student_id
+      return False
+      
         
-    def list_books(self):
-        pass
+    def list_books(self) -> list[int]:
+        return [book.isbn for book in self.books]
         
     def borrow_book(self, isbn: int, student_id: int):
-        pass
-        
+      ## list has any items, then user is registered
+      isUserReg: list[User] = [user for user in self.users if user.student_id == student_id] 
+      foundBook: False | Book = self.find_book_by_isbn(isbn)
+      if foundBook and isUserReg:
+        if not foundBook.is_borrowed:
+          foundBook.is_borrowed = True
+          foundBook.borrower = student_id
+          self._save_data()
+          return True
+      return False
+          
     def return_book(self, isbn: int):
-        pass
+      foundBook = self.find_book_by_isbn(isbn)
+      if foundBook:
+        foundBook.is_borrowed = False
+        foundBook.borrower = -1 ## just to be safe, don't leave stale data active
+        return True
+      return False
+
+
+
+
