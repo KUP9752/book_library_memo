@@ -150,9 +150,10 @@ class Library:
           
     def return_book(self, isbn: int):
       foundBook = self.find_book_by_isbn(isbn)
-      if foundBook:
+      if foundBook and foundBook.is_borrowed:
         foundBook.is_borrowed = False
-        foundBook.borrower = -1 ## just to be safe, don't leave stale data active
+        foundBook.borrower = None ## just to be safe, don't leave stale data active
+        self._save_data()
         return True
       return False
 
