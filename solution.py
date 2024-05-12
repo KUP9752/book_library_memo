@@ -121,7 +121,7 @@ class Library:
         if book.isbn == isbn:
           self.books.remove(book)
           res = book.title
-      self._save_data()
+          self._save_data()
       return res
       
     def delete_user(self, student_id: int):
@@ -129,6 +129,7 @@ class Library:
       if fakeUser in self.users:
         if not list(filter(lambda book: book.borrower == student_id, self.books)):
           self.users.remove(fakeUser)
+          self._save_data()
           return student_id
       return False
       
@@ -152,7 +153,7 @@ class Library:
       foundBook = self.find_book_by_isbn(isbn)
       if foundBook and foundBook.is_borrowed:
         foundBook.is_borrowed = False
-        foundBook.borrower = None ## just to be safe, don't leave stale data active
+        foundBook.borrower = None 
         self._save_data()
         return True
       return False
